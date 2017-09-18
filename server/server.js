@@ -16,14 +16,19 @@ io.on('connection', (socket) => {
     console.log('New user connected');
 
 //this emiter goes from server to client
-    socket.emit('newMessage', {
-      from: 'Locos',
-      text: 'Ok, loquillo te veo despues!',
-      createdAt: 12123
-    })
+    // socket.emit('newMessage', {
+    //   from: 'Locos',
+    //   text: 'Ok, loquillo te veo despues!',
+    //   createdAt: 12123
+    // })
 
-    socket.on('createMessage', (newMessage) => {
-      console.log('From client: createMessage',newMessage);
+    socket.on('createMessage', (message) => {
+      console.log('From client: createMessage',message);
+      io.emit('newMessage', {
+        from: message.from,
+        text: message.text,
+        createdAt: new Date().getTime()
+      })
     });
 
     socket.on('disconnect', () => {
