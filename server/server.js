@@ -15,12 +15,21 @@ app.use(express.static(publicPath))
 io.on('connection', (socket) => {
     console.log('New user connected');
 
-//this emiter goes from server to client
-    // socket.emit('newMessage', {
-    //   from: 'Locos',
-    //   text: 'Ok, loquillo te veo despues!',
-    //   createdAt: 12123
-    // })
+
+    socket.emit('newMessage', {
+      from: 'Admin',
+      text: 'Welcome to the Chat App!!',
+      createdAt: new Date().getTime()
+    });
+
+
+    socket.broadcast.emit('newMessage', {
+      from: 'Admin',
+      text: 'New user joined!!',
+      createdAt: new Date().getTime()
+    });
+
+
 
     socket.on('createMessage', (message) => {
       console.log('From client: createMessage',message);
@@ -28,8 +37,15 @@ io.on('connection', (socket) => {
         from: message.from,
         text: message.text,
         createdAt: new Date().getTime()
-      })
-    });
+      });
+
+    // socket.broadcast.emit('newMessage', {
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date().getTime()
+    // });
+
+   });
 
     socket.on('disconnect', () => {
       console.log('client has disconnected');
