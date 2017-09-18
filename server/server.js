@@ -15,18 +15,21 @@ app.use(express.static(publicPath))
 io.on('connection', (socket) => {
     console.log('New user connected');
 
+//this emiter goes from server to client
+    socket.emit('newMessage', {
+      from: 'Locos',
+      text: 'Ok, loquillo te veo despues!',
+      createdAt: 12123
+    })
+
+    socket.on('createMessage', (newMessage) => {
+      console.log('From client: createMessage',newMessage);
+    });
+
     socket.on('disconnect', () => {
       console.log('client has disconnected');
     });
 });
-
-
-
-
-
-app.get('/', (req, res) => {
-  res.send("Hola mundo cruel");
-})
 
 server.listen(3000, () => {
   console.log(`Server started on port ${port}`)
